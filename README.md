@@ -5,7 +5,7 @@ This repository presents the Python code for ESAI (Efficient Split Artificial In
 
 The repository consists of two main sections:
 
-The first part involves the integration of knowledge distillation technique to the search space of the Neural Architecture Search (NAS) morphism-based method proposed in [NAS-Morphism](https://arxiv.org/abs/1711.04528). 
+The first part involves the integration of the knowledge distillation technique into the search space of the Neural Architecture Search (NAS) morphism-based method proposed in [NAS-Morphism](https://arxiv.org/abs/1711.04528). 
 
 The second part includes the implementation of the proposed efficient split neural network framework. In this framework, a decision unit evaluates the inference results of the client model. If the uncertainty of the result is low, the sample is sent to a server for classification by a more complex model with higher accuracy. Otherwise, the result is directly presented to the user.
 
