@@ -1,4 +1,5 @@
 # ESAI
+![Framework](https://github.com/BehnamZeinali/ESAI/assets/29498989/5f787b9d-572a-409a-8fb0-8ed84b2548fd)
 
 This repository presents the Python code for ESAI (Efficient Split Artificial Intelligence via Early Exiting Using Neural Architecture Search), as detailed in a paper submitted to IEEE Transaction on Emerging Topics in Computational Intelligence.
 
@@ -17,6 +18,7 @@ The repository contains the following files:
 3- distillation_nas.py: Integrates the knowledge distillation method with the NAS method presented in [NAS-Morphism](https://github.com/akwasigroch/NAS_network_morphism). The knowledge distillation technique implementation from [knowledge-distillation](https://github.com/TropComplique/knowledge-distillation-keras/tree/master) is utilized here.
 
 4- decision_unit.py: Implements the proposed split AI framework.
+
 
 
 
