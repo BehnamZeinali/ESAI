@@ -1,14 +1,19 @@
 # ESAI
-![Framework](https://github.com/BehnamZeinali/ESAI/assets/29498989/5f787b9d-572a-409a-8fb0-8ed84b2548fd)
+
 
 This repository presents the Python code for ESAI (Efficient Split Artificial Intelligence via Early Exiting Using Neural Architecture Search), as detailed in a paper submitted to IEEE Transaction on Emerging Topics in Computational Intelligence.
 
 The repository consists of two main sections:
 
-The first part involves the integration of the knowledge distillation technique into the search space of the Neural Architecture Search (NAS) morphism-based method proposed in [NAS-Morphism](https://arxiv.org/abs/1711.04528). 
+The first part involves the integration of the knowledge distillation technique into the search space of the Neural Architecture Search (NAS) morphism-based method proposed in [NAS-Morphism](https://arxiv.org/abs/1711.04528).
+
+![KD_Nas](https://github.com/BehnamZeinali/ESAI/assets/29498989/1ddc7985-494b-4d9e-8b35-5a13ebc1df5e)
+
+
 
 The second part includes the implementation of the proposed efficient split neural network framework. In this framework, a decision unit evaluates the inference results of the client model. If the uncertainty of the result is low, the sample is sent to a server for classification by a more complex model with higher accuracy. Otherwise, the result is directly presented to the user.
 
+![Framework](https://github.com/BehnamZeinali/ESAI/assets/29498989/5f787b9d-572a-409a-8fb0-8ed84b2548fd)
 The repository contains the following files:
 
 1- server_model.py: Implements a transfer learning method using a pre-trained model.
