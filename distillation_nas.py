@@ -3,9 +3,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed May 27 23:48:03 2020
+In this code the knowledge distillation technique has been applied to the search space of the Neural Architecture Search methoed propoded in:
+https://github.com/akwasigroch/NAS_network_morphism
 
-@author: behnam
+The main.py file has been modified in this code. 
 """
 
 
@@ -1220,26 +1221,7 @@ class HillClimb():
             print('Algorithm found a new best organism')
             previous_best = max(list_of_result)
             best_founded += 1
-            # if previous_best < max(list_of_result):
-            #     shutil.copyfile(list_of_organisms[best].folder+'model.json', 'best/model_start.json')
-            #     shutil.copyfile(list_of_organisms[best].folder+'weights.h5', 'best/weights_start.h5')
-            #     shutil.copyfile(list_of_organisms[best].folder+'model.json', 'best/model_epoch%d.json' % epoch)
-            #     shutil.copyfile(list_of_organisms[best].folder+'weights.h5', 'best/weights_epoch%d.h5' % epoch)
-
-            #     if os.path.exists(list_of_organisms[best].folder+'model_after_modification.png'):
-            #         shutil.copyfile(list_of_organisms[best].folder+'model_after_modification.png', 'best/model.png')
-            #     print('Algorithm found a new best organism')
-            #     previous_best = max(list_of_result)
-            #     best_founded += 1
-            # else:
-            #     shutil.copyfile(list_of_organisms[0].folder+'model.json', 'best/model_start.json')
-            #     shutil.copyfile(list_of_organisms[0].folder+'weights.h5', 'best/weights_start.h5')
-            #     shutil.copyfile(list_of_organisms[0].folder+'model.json', 'best/model_epoch%d.json' % epoch)
-            #     shutil.copyfile(list_of_organisms[0].folder+'weights.h5', 'best/weights_epoch%d.h5' % epoch)
-
-            #     if os.path.exists(list_of_organisms[0].folder+'model_after_modification.png'):
-            #         shutil.copyfile(list_of_organisms[0].folder+'model_after_modification.png', 'best/model.png')
-            #     print('Algorithm did not find a new best organism')
+           
             print('Total new organism: %f' % (best_founded))
             with open('best/results.txt', 'a') as myfile:
                 myfile.write(str(datetime.datetime.now()))
