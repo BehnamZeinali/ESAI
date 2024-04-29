@@ -4,6 +4,7 @@
 Created on Tue Apr  6 21:49:05 2021
 
 @author: behnam
+The proposed spli AI femaework has been implemented in this file.
 """
 
 from tensorflow.python.keras.models import Model, Sequential, model_from_config, load_model
