@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Sep  1 22:41:49 2021
-
-@author: behnam
+Transfer learning method for implementing a server model has been implemented in this file
 """
 
 import tensorflow as tf
