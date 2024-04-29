@@ -14,7 +14,7 @@ The repository contains the following files:
 
 2- get_logits.py: Removes the last activation function layer and produces the logits of the server model.
 
-3- distillation_nas.py: Integrates the knowledge distillation method with the NAS method presented in [NAS-Morphism](https://github.com/akwasigroch/NAS_network_morphism). The knowledge distillation technique from [knowledge-distillation](https://github.com/TropComplique/knowledge-distillation-keras/tree/master) is utilized here.
+3- distillation_nas.py: Integrates the knowledge distillation method with the NAS method presented in [NAS-Morphism](https://github.com/akwasigroch/NAS_network_morphism). The knowledge distillation technique implementation from [knowledge-distillation](https://github.com/TropComplique/knowledge-distillation-keras/tree/master) is utilized here.
 
 4- decision_unit.py: Implements the proposed split AI framework.
 
