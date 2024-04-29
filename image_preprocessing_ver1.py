@@ -1,8 +1,7 @@
 
 """
-Created on Wed May 27 17:05:35 2020
-
-@author: behnam
+This is the same code for implementing knowledge distillation technique provided in:
+https://github.com/TropComplique/knowledge-distillation-keras/tree/master 
 """
 
 from __future__ import absolute_import
