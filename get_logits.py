@@ -15,15 +15,6 @@ from tensorflow.python.keras.models import Model
 
 
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed May 27 11:15:34 2020
-
-@author: behnam
-"""
-
-
 
 # from keras.utils import multi_gpu_model
 
@@ -39,11 +30,22 @@ device_lib.list_local_devices()# Check if we're using a GPU device
 
 # import efficientnet.tfkeras
 
-from tensorflow.keras.models import load_model
+from tensorflow.keras.models import load_model, model_from_config
 from tensorflow.keras.applications import MobileNet , MobileNetV2, Xception
 import tensorflow as tf
 from tensorflow.keras.models import clone_model
-model = load_model('imagenet_16_120_transfer_server_model.h5')
+# model = load_model('imagenet_16_120_transfer_server_model.h5')
+
+import json
+with open('server_model.json', 'r') as f:
+    model_json = json.load(f)
+model = model_from_config(model_json)
+
+model.load_weights('server_model_weights.h5')
+
+
+
+
 # model.load_weights( 'imagenet_16_120_inception_resnet_v2_weights_epoch_40.h5' )
 print ('model loaded successfully')
 
@@ -65,22 +67,9 @@ last_layer.activation = None
 ##########################################    
 from PIL import Image
 from utils import get_datasets
-train_data, test_data = get_datasets('/home/behnam/Desktop/Implementation_imagenet/ImageNet16')
+train_data, test_data = get_datasets('./ImageNet16')
 
-
-### test image to see if it is correct
-img = train_data.data[0]
-img = Image.fromarray(img)
-img.show()
-
-# 
 x_train = np.array(train_data.data)
-
-
-img = x_train[0]
-img = Image.fromarray(img)
-img.show()
-
 
 y_train = np.array(train_data.targets)
 
@@ -149,7 +138,7 @@ for x_batch, name_batch in tqdm(val_generator):
     batches += 1
     if batches >= 187.5: # 6000/32
         break
-# val_logits = np.array(val_logits)
+val_logits = np.array(val_logits)
 
 
 batches = 0
@@ -166,14 +155,12 @@ for x_batch, name_batch in tqdm(train_generator):
     batches += 1
     if batches >= 4553.125: # 151700/32
         break
-# train_logits = np.array(train_logits)
+train_logits = np.array(train_logits)
 
 
 
 
 
-
-
-np.save( 'train_logits_resnet_inception_imagenet_16_120.npy', train_logits)
-np.save( 'val_logits_resnet_inception_imagenet_16_120.npy', val_logits)
+np.save( 'train_logits_server_imagenet_16_120.npy', train_logits)
+np.save( 'val_logits_server_imagenet_16_120.npy', val_logits)
 
