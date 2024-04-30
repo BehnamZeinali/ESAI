@@ -3,10 +3,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+Created on Wed May 27 23:48:03 2020
+
+@author: behnam
+
 In this code the knowledge distillation technique has been applied to the search space of the Neural Architecture Search methoed propoded in:
 https://github.com/akwasigroch/NAS_network_morphism
 
-The main.py file has been modified in this code. 
+The main.py from https://github.com/akwasigroch/NAS_network_morphism/main.py file has been modified in this code. 
 """
 
 
@@ -39,11 +43,9 @@ import matplotlib.pyplot as plt
 import os
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 
-# os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
-# export CUDA_VISIBLE_DEVICES = 1
 
-gpu_index = 3  # Change this to the index of the GPU you want to use (e.g., 0, 1, 2, ...)
+gpu_index = 0  # Change this to the index of the GPU you want to use (e.g., 0, 1, 2, ...)
 physical_devices = tf.config.experimental.list_physical_devices('GPU')
 if physical_devices:
     tf.config.experimental.set_visible_devices(physical_devices[gpu_index], 'GPU')
@@ -65,20 +67,14 @@ datagen = ImageDataGenerator_2(
 # # modify the default parameters of np.load
 # np.load = lambda *a,**k: np_load_old(*a, allow_pickle=True, **k)
 
-train_logits = np.load('./train_logits_resnet_inception_imagenet_16_120.npy' , allow_pickle= True)[()]
-val_logits = np.load('./val_logits_resnet_inception_imagenet_16_120.npy' , allow_pickle= True)[()]
+train_logits = np.load('./train_logits_server_imagenet_16_120.npy' , allow_pickle= True)[()]
+val_logits = np.load('./val_logits_server_imagenet_16_120.npy' , allow_pickle= True)[()]
 
 
 from utils import get_datasets
-train_data, test_data = get_datasets('/home/behnam_new/Desktop/ESAI/ImageNet16')
-
-
+train_data, test_data = get_datasets('./ImageNet16')
 
 x_train = np.array(train_data.data)
-
-
-
-
 y_train = np.array(train_data.targets)
 
 x_test = np.array(test_data.data)
@@ -1221,7 +1217,26 @@ class HillClimb():
             print('Algorithm found a new best organism')
             previous_best = max(list_of_result)
             best_founded += 1
-           
+            # if previous_best < max(list_of_result):
+            #     shutil.copyfile(list_of_organisms[best].folder+'model.json', 'best/model_start.json')
+            #     shutil.copyfile(list_of_organisms[best].folder+'weights.h5', 'best/weights_start.h5')
+            #     shutil.copyfile(list_of_organisms[best].folder+'model.json', 'best/model_epoch%d.json' % epoch)
+            #     shutil.copyfile(list_of_organisms[best].folder+'weights.h5', 'best/weights_epoch%d.h5' % epoch)
+
+            #     if os.path.exists(list_of_organisms[best].folder+'model_after_modification.png'):
+            #         shutil.copyfile(list_of_organisms[best].folder+'model_after_modification.png', 'best/model.png')
+            #     print('Algorithm found a new best organism')
+            #     previous_best = max(list_of_result)
+            #     best_founded += 1
+            # else:
+            #     shutil.copyfile(list_of_organisms[0].folder+'model.json', 'best/model_start.json')
+            #     shutil.copyfile(list_of_organisms[0].folder+'weights.h5', 'best/weights_start.h5')
+            #     shutil.copyfile(list_of_organisms[0].folder+'model.json', 'best/model_epoch%d.json' % epoch)
+            #     shutil.copyfile(list_of_organisms[0].folder+'weights.h5', 'best/weights_epoch%d.h5' % epoch)
+
+            #     if os.path.exists(list_of_organisms[0].folder+'model_after_modification.png'):
+            #         shutil.copyfile(list_of_organisms[0].folder+'model_after_modification.png', 'best/model.png')
+            #     print('Algorithm did not find a new best organism')
             print('Total new organism: %f' % (best_founded))
             with open('best/results.txt', 'a') as myfile:
                 myfile.write(str(datetime.datetime.now()))
@@ -1340,3 +1355,8 @@ plt.show()
 
 
 
+json_txt = model.to_json()
+json_object = json.loads(json_txt)
+with open('nas_distilled_client_model.json', 'w') as f:
+    json.dump(json_object, f, indent=2)
+model.save_weights('nas_distilled_client_model_weights.h5')
