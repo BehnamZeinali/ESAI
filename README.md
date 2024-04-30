@@ -25,6 +25,7 @@ The repository contains the following files:
 
 4- decision_unit.py: Implements the proposed split AI framework.
 
+![Figure 2024-04-30 135634](https://github.com/BehnamZeinali/ESAI/assets/29498989/cb8bc260-bcdc-4c47-b721-16649d7d16dd)
 
 
 
