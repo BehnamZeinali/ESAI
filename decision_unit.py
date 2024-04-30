@@ -4,7 +4,8 @@
 Created on Tue Apr  6 21:49:05 2021
 
 @author: behnam
-The proposed spli AI femaework has been implemented in this file.
+
+The proposed Split AI framework has been implemented in this file
 """
 
 from tensorflow.python.keras.models import Model, Sequential, model_from_config, load_model
@@ -52,7 +53,13 @@ y_train = y_train[:-6000]
 y_val_ = y_val
 
 
-model = load_model('imagenet_16_120_distilled_final_01.h5')
+# model = load_model('imagenet_16_120_distilled_final_01.h5')
+import json
+with open('nas_distilled_client_model.json', 'r') as f:
+    model_json = json.load(f)
+model = model_from_config(model_json)
+
+model.load_weights('nas_distilled_client_model_weights.h5')
 def preprocess_data(X, Y):
     """
     function that pre-processes the CIFAR10 dataset as per
@@ -112,7 +119,7 @@ for i in range(0, len(classified)):
         
 from sklearn.metrics import accuracy_score
 scores = accuracy_score(classified, label )
-print('\n valid(test) main data accuracy: ' , scores)
+print('\n valid data accuracy: ' , scores)
 
 i = 0
 meta_data_train_label = np.zeros((predict.shape[0],1))
@@ -140,7 +147,7 @@ for i in range(predict.shape[0]):
 true_class = []
 false_class = []
 for i in range(0, len(predict)):
-    print(meta_data_train[2,i])
+    # print(meta_data_train[2,i])
     if (meta_data_train_label[i] == 1):
         # true_class.append(meta_data_train[0,i])
         # true_class.append(meta_data_train[1,i])
@@ -208,7 +215,7 @@ for i in range(0, len(classified)):
         
 from sklearn.metrics import accuracy_score
 scores = accuracy_score(classified, label )
-print('\n test(valid) main data accuracy: ' , scores)
+print('\n test data accuracy: ' , scores)
 
 meta_data_test_label = np.zeros((client_predict.shape[0],1))
 for i in range(0, len(client_predict)):
@@ -255,18 +262,14 @@ print('\n Decision unit accuracy: ' , scores)
 
 du_probs = model_du.predict(meta_data_test, verbose=1)
 
-# with open('first_exit_probs.npy', 'wb') as f:
-#     np.save(f, probs) 
-    
-# with open('first_exit_preds.npy', 'wb') as f:
-#     np.save(f, meta_data_test_predict) 
-  
-model_du.save('model_du.h5')  
 
-converter = tf.compat.v1.lite.TFLiteConverter.from_keras_model_file('model_du.h5')
-tfmodel = converter.convert() 
-open ('model_du.tflite' , "wb") .write(tfmodel)
-print('TFLite is saved')
+  
+# model_du.save('model_du.h5')  
+
+# converter = tf.compat.v1.lite.TFLiteConverter.from_keras_model_file('model_du.h5')
+# tfmodel = converter.convert() 
+# open ('model_du.tflite' , "wb") .write(tfmodel)
+# print('TFLite is saved')
 
 
 
@@ -283,31 +286,6 @@ final_result = np.zeros((100 , 6))
 threshold  = np.linspace(0,1,100)
 
 
-
-
-
-# server_model = load_model('last_model_inception_resnet_v2.h5')
-# del x_train
-# server_predict = np.zeros(shape=(10000,10))
-# for i, (inputs_batch, labels_batch) in enumerate(test_generator):
-#     print(i)
-#     if i * batch_size >= 10000:
-#         break   
-#     # pass the images through the network
-#     x_train = server_model.predict(inputs_batch)
-#     server_predict[i * batch_size : (i + 1) * batch_size] = x_train
-   
-
-# server_classified = np.zeros((len(true_label),1));
-# label = np.zeros((len(true_label),1));
-# for i in range(0, len(server_classified)):
-#         server_classified[i] = np.where(server_predict[i] == np.amax(server_predict[i])) 
-#         label[i] = (np.where(true_label[i] == np.amax(true_label[i])))    
-    
-# scores = accuracy_score(server_classified, label )
-# print('\n server accuracy: ' , scores)
-
-# server_decision = (server_classified == label)
 
 server_decision = np.load('server_decision.npy')
 for tr in threshold:
@@ -343,7 +321,7 @@ for tr in threshold:
                        server_correct_numbr = server_correct_numbr + 1 
                     
         
-        print(tr_index)
+        # print(tr_index)
         final_result[tr_index,:] = tr  ,tp, tn, fp, fn, server_correct_numbr
         tr_index = tr_index + 1
         
@@ -386,130 +364,5 @@ ax2.plot(threshold , final_depict[:,1], color=color)
 ax2.tick_params(axis='y', labelcolor=color)
 
 fig.tight_layout()  # otherwise the right y-label is slightly clipped
-plt.title('ESAI performance on ImageNet16-120', kwargs)
+plt.title('ESAI performance on ImageNet16-120')
 plt.show()  
-
-# from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 unused import
-
-# import matplotlib.pyplot as plt
-# from matplotlib import cm
-# from matplotlib.ticker import LinearLocator, FormatStrFormatter
-# import numpy as np
-
-
-# fig = plt.figure()
-# ax = fig.gca(projection='3d')
-
-# # Make data.
-# X = first_threshold
-# Y = last_threshold
-# X, Y = np.meshgrid(X, Y)
-
-# Z = np.reshape(final_depict[:,4] , (100,100))
-
-# surf = ax.plot_surface(X, Y, Z, cmap=cm.coolwarm,
-#                        linewidth=0, antialiased=False)
-
-# # Customize the z axis.
-# ax.set_zlim(0.5, 0.95)
-# # ax.zaxis.set_major_locator(LinearLocator(10))
-# # ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
-
-# # Add a color bar which maps values to colors.
-# fig.colorbar(surf, shrink=0.5, aspect=5)
-
-# plt.show()
-
-# ####################################################################################################
-
-# ####################################################################################################
-
-
-
-# sample_index = 0
-# second_threshold = 0.8
-# last_threshold = 0.7
-
-# first_exit_number = 0
-# last_exit_number = 0
-# import time
-# first_exit_time = []
-# last_exit_time = []
-
-# for i in range(0,len(valid_generator)):
-#     temp = (valid_generator[i][0])
-#     for j in range(0,valid_generator[i][1].shape[0]-1):
-#         start_time = time.time()
-#         #print(sample_index)
-# #            y_train[k]= (np.where(((test_generator[i][1][j])) == np.amax((test_generator[i][1][j]))))
-# #            np.amax((test_generator[i][1][j]));
-#         sample = temp[j,:,:,:]
-#         sample = np.reshape(sample, [1,224,224,3])
-#         node_1 = model_node_one.predict(sample)
-#         exit_2 =  model_exit_one.predict(node_1)
-        
-    
-#         max_value = exit_2.max()
-#         exit_2 = exit_2[0]
-#         probs_sorted= np.sort(exit_2)[::-1]
-#         least_confidence = probs_sorted[0] - probs_sorted[1]
-#         log_probs = np.log(exit_2)
-#         entropy = (exit_2*log_probs).sum()
-#         std = np.std(exit_2)
-#         temp_features = [max_value , least_confidence, entropy, std]
-        
-#         temp_features = np.reshape(temp_features, [1,4])
-        
-#         du_second_value = first_exit_du.predict(temp_features)
-        
-#         sending_classified = meta_data_test_label[sample_index]
-        
-
-#         if (du_second_value >= second_threshold):
-#             sending_decision = 1
-#         else:
-#             sending_decision = 0
-            
-        
-#         if (sending_decision == 1):
-#             # print("---first exit time:  %s seconds ---" % (time.time() - start_time))
-#             first_exit_time.append(time.time() - start_time)
-#             continue
-#         else:
-#             exit_last =  model_exit_last.predict(node_1)
-    
-#             max_value = exit_last.max()
-#             exit_last = exit_last[0]
-#             probs_sorted= np.sort(exit_last)[::-1]
-#             least_confidence = probs_sorted[0] - probs_sorted[1]
-#             log_probs = np.log(exit_last)
-#             entropy = (exit_last*log_probs).sum()
-#             std = np.std(exit_last)
-#             temp_features = [max_value , least_confidence, entropy, std]
-            
-#             temp_features = np.reshape(temp_features, [1,4])
-            
-#             du_last_value = first_exit_du.predict(temp_features)
-            
-#             sending_classified = meta_data_test_label[sample_index]
-#             sample_index = sample_index + 1
-#             if (du_last_value >= last_threshold):
-#                 sending_decision = 1
-#             else:
-#                 sending_decision = 0
-#             if (sending_decision == 0):
-#                 last_exit_number = last_exit_number +1
-#             last_exit_time.append(time.time() - start_time)
-# first_exit_time = np.array(first_exit_time)
-# first_mean = np.mean(first_exit_time)
-# last_exit_time = np.array(last_exit_time)
-# last_mean = np.mean(last_exit_time)
-
-
-
-# ####################################################################################################
-
-# ####################################################################################################
-
-
-
