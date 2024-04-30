@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Transfer learning method for implementing a server model has been implemented in this file
+Created on Wed Sep  1 22:41:49 2021
+
+@author: behnam
 """
 
 import tensorflow as tf
@@ -23,7 +25,6 @@ from tensorflow.keras.layers import *
 from tensorflow.python.keras.models import Model, Sequential, model_from_config, load_model
 from tensorflow.keras.applications import InceptionResNetV2
 
-model = load_model('imagenet_16_120_transfer_inception_resnet_v2.h5')
 
 from utils import get_datasets
 train_data, test_data = get_datasets('./ImageNet16')
@@ -171,12 +172,19 @@ plt.xlabel('epoch')
 plt.legend(['train', 'valid'])
 plt.show()
 
-model.save('last_model_imagenet.h5')
+# model.save('last_model_imagenet.h5')
 
-model.save_weights('server_model_saved_weights.h5')
+# model.save_weights('server_model_saved_weights.h5')
 
 
+# model = load_model('imagenet_16_120_transfer_server_model.h5')
 
+import json
+json_txt = model.to_json()
+json_object = json.loads(json_txt)
+with open('server_model.json', 'w') as f:
+    json.dump(json_object, f, indent=2)
+model.save_weights('server_model_weights.h5')
 
 batch_size=32
 server_predict = []
@@ -203,13 +211,13 @@ for i in range(0, len(classified)):
         
 from sklearn.metrics import accuracy_score
 scores = accuracy_score(classified, label )
-print('\n test(valid) main data accuracy: ' , scores)
+print('\n server accuracy: ' , scores)
 
 server_decision = (classified == label)
 
-np.saved ('server_decision.npy')
+np.save ('server_decision.npy', server_decision)
 
-
+del model
 
 #----------------------------------------------------------
 
